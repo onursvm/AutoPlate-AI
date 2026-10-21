@@ -1,66 +1,46 @@
-# ⚡ AutoPlate AI - YOLOv11 & EasyOCR Plaka Tanıma ve Hedef Takip Sistemi
+# ⚡ AutoPlate AI - YOLOv11 & Advanced OCR License Plate Recognition & Target Tracking System
 
-Yapay zeka tabanlı bu masaüstü uygulaması; **YOLOv11** ile araçların uzaktaki plakalarını yüksek hassasiyetle tespit eder, **EasyOCR** ile plaka üzerindeki alfanümerik metinleri okur ve belirlediğiniz **hedef plakalarla (aranan/şüpheli liste)** anlık eşleştirme yaparak sesli ve görsel alarm üretir.
-
----
-
-## 🌟 Öne Çıkan Özellikler
-
-1. **YOLOv11 Plaka Tespiti (`license-plate-finetune-v1n.pt`)**:
-   - Araç plakaları üzerine özel eğitilmiş YOLOv11 mimarisi.
-   - **Uzaktaki Araçlar İçin Yüksek Çözünürlük Desteği**: Standart 640px veya 1280px yüksek çözünürlüklü tarama modu.
-   - Plaka sınırlarını pay bırakarak keser (karakterlerin kenardan kırpılmasını önler).
-
-2. **Gelişmiş EasyOCR & Görüntü Ön İşleme (Enhancement)**:
-   - Küçük ve uzaktaki plaka görüntüleri için otomatik **Bicubic boyut büyütme**.
-   - **CLAHE (Contrast Limited Adaptive Histogram Equalization)** ile parlama ve gölgeleri dengeleme.
-   - **Bilateral filtreleme** ve keskinleştirme ile harf kenarlarını belirginleştirme.
-   - Türk plakalarındaki sol mavi bandı (`TR` / `R`) ve gereksiz karakterleri temizleyen akıllı normalizasyon.
-
-3. **🎯 Hedef Plaka Arama ve Eşleştirme (Target Matcher)**:
-   - Takip etmek istediğiniz plakayı (veya virgülle birden fazla plakayı) arayüze ekleyin.
-   - Birebir tam eşleşme, alt dize eşleşmesi ve **Fuzzy (benzerlik toleransı)** desteği.
-   - Hedef yakalandığında:
-     - 🚨 **Görsel Alarm:** Canlı video üzerinde kırmızı fütüristik çerçeve ve üst bant uyarısı.
-     - 🔊 **Sesli Alarm:** Çift tonlu dikkat çekici sesli uyarı.
-     - 💾 **Otomatik Delil Kaydı:** Plakanın kırpılmış hali ve anlık tam kamera karesi `records/alerts/` klasörüne zaman damgasıyla otomatik kaydedilir.
-
-4. **📹 Çoklu Giriş Kaynağı Desteği**:
-   - **Video Dosyası**: `.mp4`, `.avi`, `.mkv`, `.mov` dosyalarını seçme, duraklatma ve döngüyle oynatma.
-   - **Web Kamerası**: Bilgisayara bağlı dilediğiniz kamerayı (0, 1, 2...) canlı izleme.
-   - **Güvenlik Kamerası (IP / RTSP Akışı)**: Güvenlik kamerasının RTSP (`rtsp://kullanici:sifre@ip:port/stream`) veya HTTP canlı akış adresini girerek anlık analiz yapma.
-
-5. **📋 Canlı Tespit Tablosu & Excel/CSV Raporlama**:
-   - Tespit edilen tüm plakaları anlık olarak listeler.
-   - Çift tıklayarak plakanın büyütülmüş görselini ve tam kare fotoğrafını inceleme.
-   - Tek tıkla tüm kayıtları Excel uyumlu UTF-8 CSV olarak dışa aktarma.
+An AI-powered desktop application that detects distant vehicle license plates with high precision using **YOLOv11**, recognizes alphanumeric characters via high-accuracy OCR, and performs real-time matching against a user-defined **watchlist / target plate list**, triggering instant audio and visual alerts.
 
 ---
 
-## 🚀 Kurulum ve Çalıştırma
+## 🌟 Key Features
 
-### 1. Uygulamayı Başlatma
-Proje dizininde sanal ortam (`.venv`) üzerinden uygulamayı başlatmak için:
+1. **YOLOv11 License Plate Detection (`license-plate-finetune-v1n.pt`)**:
+   - Custom fine-tuned YOLOv11 architecture specifically trained on vehicle license plates.
+   - **High-Resolution Support for Distant Vehicles**: Standard 640px or enhanced 1280px high-resolution scanning modes.
+   - Dynamic boundary padding to prevent edge characters from being cropped out.
+
+2. **Advanced OCR & Image Preprocessing (Enhancement Engine)**:
+   - Automatic **Bicubic upscaling** for small and distant plate crops.
+   - **CLAHE (Contrast Limited Adaptive Histogram Equalization)** to eliminate glare, shadows, and low-light degradation.
+   - **Bilateral filtering** and sharpening to accentuate character edges.
+   - Intelligent normalization that automatically strips unnecessary symbols and the European/Turkish blue stripe artifacts (`TR` / `R`).
+
+3. **🎯 Target Plate Watchlist & Smart Matching (Target Matcher)**:
+   - Add single or comma-separated target plates to the watchlist.
+   - Supports exact match, substring match, and **Fuzzy matching (similarity tolerance)**.
+   - When a target vehicle is spotted:
+     - 🚨 **Visual Alert:** Futuristic red HUD bounding box and header warning banner on the live video stream.
+     - 🔊 **Audio Alarm:** Dual-tone high-priority alert sound.
+     - 💾 **Automatic Evidence Archiving:** Both the cropped plate and the full-frame timestamped camera snapshot are saved automatically under `records/alerts/`.
+
+4. **📹 Multi-Source Video Input Support**:
+   - **Video Files**: Play, pause, seek, and loop `.mp4`, `.avi`, `.mkv`, and `.mov` video files.
+   - **Webcams**: Direct live streaming from any connected USB camera (0, 1, 2...).
+   - **IP / Security Cameras (RTSP Stream)**: Real-time analysis from surveillance cameras using RTSP (`rtsp://user:pass@ip:port/stream`) or HTTP video feeds.
+
+5. **📋 Live Detection Dashboard & Excel/CSV Reporting**:
+   - Real-time tabular listing of all detected plates with timestamps and confidence scores.
+   - Double-click any record to inspect high-resolution plate crops and full scene snapshots.
+   - One-click export to Excel-compatible UTF-8 CSV.
+
+---
+
+## 🚀 Installation & Quick Start
+
+### 1. Launching the Application
+Run the application using the local virtual environment (`.venv`):
 
 ```bash
-.venv\Scripts\python.exe main.py
-```
-*(veya terminalde `python main.py`)*
-
-### 2. Video ile Kullanım
-1. Uygulamayı çalıştırın.
-2. Sağdaki **"📹 Giriş Kaynağı"** sekmesinden **"Gözat..."** butonuna tıklayarak bilgisayarınızdaki herhangi bir araç/trafik videosunu (`.mp4`, `.avi`, `.mkv`, `.mov`) seçin.
-3. İsterseniz **"🎯 Hedef Plaka"** sekmesinden aramak istediğiniz bir plakayı yazıp **"Ekle"**ye basın.
-4. **"▶ Başlat"** butonuna basarak tespiti başlatın.
-
----
-
-## 📁 Proje Dizin Yapısı
-
-- `main.py`: Uygulamanın giriş noktası (Splash Screen ve High-DPI başlatma).
-- `main_window.py`: PyQt6 tabanlı fütüristik kullanıcı arayüzü ve video HUD çizimleri.
-- `detector.py`: YOLOv11 plaka tespit sınıfı, EasyOCR görüntü iyileştirme ve Türk plakası regex filtreleri.
-- `video_worker.py`: Donmayı engelleyen QThread arka plan video, RTSP ve kamera işleme motoru.
-- `plate_history.py`: Tespit edilen plakaların kaydedilmesi, alarmların yönetimi ve CSV dışa aktarımı.
-- `styles.py`: Glassmorphism ve Dark Theme (Obsidian & Neon) QSS stil sayfası.
-- `records/`: Tespit edilen normal plakaların (`detections/`) ve aranan hedef alarmlarının (`alerts/`) saklandığı klasör.
+run.bat
